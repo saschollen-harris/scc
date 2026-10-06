@@ -3875,6 +3875,31 @@ var languageDatabase = map[string]Language{
 		FileNames:       []string{},
 		SheBangs:        []string{},
 	},
+	"DDS": {
+		LineComment:      []string{},
+		ComplexityChecks: []string{},
+		Extensions: []string{
+			"dds",
+			"dspf",
+			"lf",
+			"pf",
+			"prtf",
+			"mnudds",
+			"mnucmd",
+		},
+		ExtensionFile:   false,
+		MultiLine:       [][]string{},
+		Quotes:          []Quote{},
+		NestedMultiLine: false,
+		LineSplice:      false,
+		Escape:          "",
+		CaseInsensitive: false,
+		CommentIsWord:   false,
+		Keywords:        []string{},
+		Heuristics:      []Heuristic{},
+		FileNames:       []string{},
+		SheBangs:        []string{},
+	},
 	"DM": {
 		LineComment: []string{
 			"//",
@@ -6537,6 +6562,46 @@ var languageDatabase = map[string]Language{
 		Heuristics:      []Heuristic{},
 		FileNames:       []string{},
 		SheBangs:        []string{},
+	},
+	"IBM i CL": {
+		LineComment:      []string{},
+		ComplexityChecks: []string{},
+		Extensions: []string{
+			"clp",
+			"clle",
+			"cmd",
+		},
+		ExtensionFile: false,
+		MultiLine: [][]string{
+			{
+				"/*",
+				"*/",
+			},
+		},
+		Quotes: []Quote{
+			{
+				Start:        "'",
+				End:          "'",
+				IgnoreEscape: true,
+				DocString:    false,
+				Delimited:    false,
+			},
+		},
+		NestedMultiLine: false,
+		LineSplice:      false,
+		Escape:          "",
+		CaseInsensitive: false,
+		CommentIsWord:   false,
+		Keywords:        []string{},
+		Heuristics: []Heuristic{
+			{
+				Pattern:  "(?im)^[ \\t]*(?:CMD|PARM|QUAL|ELEM|DEP)[ \\t]+(?:[A-Z][A-Z0-9_]*[ \\t]*\\(|\\+[ \\t]*$)",
+				Literals: []string{},
+				Anchored: false,
+			},
+		},
+		FileNames: []string{},
+		SheBangs:  []string{},
 	},
 	"IDL": {
 		LineComment: []string{
@@ -11855,6 +11920,62 @@ var languageDatabase = map[string]Language{
 		FileNames:       []string{},
 		SheBangs:        []string{},
 	},
+	"RPG": {
+		LineComment:      []string{},
+		ComplexityChecks: []string{},
+		Extensions: []string{
+			"rpg",
+		},
+		ExtensionFile: false,
+		MultiLine:     [][]string{},
+		Quotes: []Quote{
+			{
+				Start:        "'",
+				End:          "'",
+				IgnoreEscape: true,
+				DocString:    false,
+				Delimited:    false,
+			},
+		},
+		NestedMultiLine: false,
+		LineSplice:      false,
+		Escape:          "",
+		CaseInsensitive: false,
+		CommentIsWord:   false,
+		Keywords:        []string{},
+		Heuristics:      []Heuristic{},
+		FileNames:       []string{},
+		SheBangs:        []string{},
+	},
+	"RPGLE": {
+		LineComment: []string{
+			"//",
+		},
+		ComplexityChecks: []string{},
+		Extensions: []string{
+			"rpgle",
+		},
+		ExtensionFile: false,
+		MultiLine:     [][]string{},
+		Quotes: []Quote{
+			{
+				Start:        "'",
+				End:          "'",
+				IgnoreEscape: true,
+				DocString:    false,
+				Delimited:    false,
+			},
+		},
+		NestedMultiLine: false,
+		LineSplice:      false,
+		Escape:          "",
+		CaseInsensitive: false,
+		CommentIsWord:   false,
+		Keywords:        []string{},
+		Heuristics:      []Heuristic{},
+		FileNames:       []string{},
+		SheBangs:        []string{},
+	},
 	"Racket": {
 		LineComment: []string{
 			";",
@@ -13012,6 +13133,41 @@ var languageDatabase = map[string]Language{
 			"dml",
 			"ddl",
 			"dql",
+		},
+		ExtensionFile: false,
+		MultiLine: [][]string{
+			{
+				"/*",
+				"*/",
+			},
+		},
+		Quotes: []Quote{
+			{
+				Start:        "'",
+				End:          "'",
+				IgnoreEscape: true,
+				DocString:    false,
+				Delimited:    false,
+			},
+		},
+		NestedMultiLine: false,
+		LineSplice:      false,
+		Escape:          "",
+		CaseInsensitive: false,
+		CommentIsWord:   false,
+		Keywords:        []string{},
+		Heuristics:      []Heuristic{},
+		FileNames:       []string{},
+		SheBangs:        []string{},
+	},
+	"SQLRPGLE": {
+		LineComment: []string{
+			"//",
+			"--",
+		},
+		ComplexityChecks: []string{},
+		Extensions: []string{
+			"sqlrpgle",
 		},
 		ExtensionFile: false,
 		MultiLine: [][]string{

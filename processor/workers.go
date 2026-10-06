@@ -952,7 +952,7 @@ func CountStats(fileJob *FileJob) {
 		if !count(fileJob, bomSkip, endPoint) {
 			return
 		}
-	} else if noTokensAtAll(langFeatures) && specialisedCounterEligible(fileJob) {
+	} else if fileJob.Language != "DDS" && noTokensAtAll(langFeatures) && specialisedCounterEligible(fileJob) {
 		if !countLoopNoTokens(fileJob, bomSkip, endPoint) {
 			return
 		}
@@ -1351,6 +1351,9 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 	needIndent := true
 
 	content := fileJob.Content
+	rpg := fileJob.Language == "RPG" || fileJob.Language == "RPGLE" || fileJob.Language == "SQLRPGLE"
+	fixedColumns := fileJob.Language == "DDS" || (rpg && (fileJob.Language == "RPG" || !rpgFullyFree(content[bomSkip:])))
+	rpgData := false
 	// Hoisted because neither changes for the life of the loop and both are
 	// read on every byte of the file.
 	byteType := fileJob.ContentByteType
@@ -1358,10 +1361,25 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 
 	for index := bomSkip; index < total; index++ {
 		curByte := content[index]
+		if index == lineStart {
+			if rpg && (index != bomSkip || fixedColumns) && bytes.HasPrefix(content[index:], []byte("**")) {
+				rpgData = true
+				fixedColumns = false
+			}
+		}
+		if fixedColumns {
+			if index == lineStart && currentState == SBlank && rpgCommentLine(content[index:]) {
+				currentState = SComment
+			}
+			// Columns 1-5 contain sequence numbers, not source code.
+			if index-lineStart < 5 && curByte != '\n' {
+				curByte = ' '
+			}
+		}
 
 		if byteType != nil {
 			byteType[index] = stateToByteType(currentState)
-		} else if index < endPoint && isBlankRun[curByte] {
+		} else if !fixedColumns && index < endPoint && isBlankRun[curByte] {
 			// A run of spaces, tabs and carriage returns changes nothing: no
 			// state moves, no line ends, and the only byte of it the loop has
 			// anything to say about is the last. Walking it a byte at a time
@@ -1381,6 +1399,9 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 		// changing anything in here and profile/measure afterwards!
 		// NB that the order of the if statements matters and has been set to what in benchmarks is most efficient
 		if !isWhitespace(curByte) {
+			if rpgData {
+				currentState = SCode
+			}
 
 			// At the first non-whitespace byte of a code-bearing line, update the
 			// indent stack so complexity tokens on this line are weighted by their
@@ -1407,6 +1428,9 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 
 			switch currentState {
 			case SCode:
+				if rpgData {
+					break
+				}
 				index, currentState, endString, endComments, ignoreEscape = codeState(
 					fileJob,
 					index,
@@ -1495,7 +1519,7 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 		// we are currently in
 		if curByte == '\n' || index >= endPoint {
 			fileJob.Lines++
-			if Cognitive {
+			if Cognitive || fixedColumns || rpg {
 				lineStart = index + 1
 				needIndent = true
 			}

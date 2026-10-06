@@ -2100,6 +2100,13 @@
     "multi_line": [["/*", "*/"]],
     "quotes": []
   },
+  "DDS": {
+    "complexitychecks": [],
+    "extensions": ["dds", "dspf", "lf", "pf", "prtf", "mnudds", "mnucmd"],
+    "line_comment": [],
+    "multi_line": [],
+    "quotes": []
+  },
   "Dart": {
     "complexitychecks": [
       "for ",
@@ -3474,6 +3481,14 @@
         "start": "\""
       }
     ]
+  },
+  "IBM i CL": {
+    "complexitychecks": [],
+    "extensions": ["clp", "clle", "cmd"],
+    "heuristics": [{"pattern": "(?im)^[ \\t]*(?:CMD|PARM|QUAL|ELEM|DEP)[ \\t]+(?:[A-Z][A-Z0-9_]*[ \\t]*\\(|\\+[ \\t]*$)"}],
+    "line_comment": [],
+    "multi_line": [["/*", "*/"]],
+    "quotes": [{"start": "'", "end": "'", "ignoreEscape": true}]
   },
   "IDL": {
     "complexitychecks": [
@@ -6367,6 +6382,20 @@
     "quotes": [],
     "shebangs": ["Rscript"]
   },
+  "RPG": {
+    "complexitychecks": [],
+    "extensions": ["rpg"],
+    "line_comment": [],
+    "multi_line": [],
+    "quotes": [{"start": "'", "end": "'", "ignoreEscape": true}]
+  },
+  "RPGLE": {
+    "complexitychecks": [],
+    "extensions": ["rpgle"],
+    "line_comment": ["//"],
+    "multi_line": [],
+    "quotes": [{"start": "'", "end": "'", "ignoreEscape": true}]
+  },
   "Racket": {
     "complexitychecks": [
       "(if",
@@ -7026,6 +7055,13 @@
         "start": "'"
       }
     ]
+  },
+  "SQLRPGLE": {
+    "complexitychecks": [],
+    "extensions": ["sqlrpgle"],
+    "line_comment": ["//", "--"],
+    "multi_line": [["/*", "*/"]],
+    "quotes": [{"start": "'", "end": "'", "ignoreEscape": true}]
   },
   "SRecode Template": {
     "complexitychecks": [
