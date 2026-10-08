@@ -2100,7 +2100,7 @@
     "multi_line": [["/*", "*/"]],
     "quotes": []
   },
-  "DDS": {
+  "IBM i DDS": {
     "complexitychecks": [],
     "extensions": ["dds", "dspf", "lf", "pf", "prtf", "mnudds", "mnucmd"],
     "line_comment": [],

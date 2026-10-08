@@ -15,9 +15,9 @@ func TestIBMiLanguages(t *testing.T) {
 		"program.sqlrpgle": "SQLRPGLE", "program.SQLRPGLE": "SQLRPGLE",
 		"program.clp": "IBM i CL", "program.CLLE": "IBM i CL",
 		"command.cmd": "IBM i CL", "command.CMD": "IBM i CL",
-		"display.DSPF": "DDS", "physical.PF": "DDS", "logical.LF": "DDS",
-		"printer.PRTF": "DDS", "menu.MNUDDS": "DDS", "command.MNUCMD": "DDS",
-		"source.dds": "DDS",
+		"display.DSPF": "IBM i DDS", "physical.PF": "IBM i DDS", "logical.LF": "IBM i DDS",
+		"printer.PRTF": "IBM i DDS", "menu.MNUDDS": "IBM i DDS", "command.MNUCMD": "IBM i DDS",
+		"source.dds": "IBM i DDS",
 	} {
 		possible, _ := DetectLanguage(filename)
 		if !slices.Contains(possible, language) {
@@ -63,10 +63,10 @@ func TestIBMiLineCounts(t *testing.T) {
 		{"CL strings and comments", "IBM i CL", "PGM\n/* comment\n   continued */\nSNDPGMMSG MSG('it''s /* text */')\n/* comment */ ENDPGM\n\n", 3, 2, 1},
 		{"command source", "IBM i CL", "/* command\n   comment */\nCMD PROMPT('It''s /* text */')\nPARM KWD(NAME) TYPE(*CHAR)\n\n", 2, 2, 1},
 		{"CL backslash does not escape", "IBM i CL", "SNDPGMMSG MSG('C:\\')\n/* comment */\n", 1, 1, 0},
-		{"DDS", "DDS", "      * DDS comment\n     A          R RECORD\n     A            FIELD         10A\n\n", 2, 1, 1},
-		{"DDS sequence numbers", "DDS", "00010A* comment\r\n00020A          R RECORD\r\n00030", 1, 1, 1},
-		{"DDS comment markers in constants", "DDS", "     A                                  CONST('/* // *')\n     A                                  TEXT('It''s text')\n      * comment", 2, 1, 0},
-		{"DDS short lines", "DDS", "\n     \n      *", 0, 1, 2},
+		{"DDS", "IBM i DDS", "      * DDS comment\n     A          R RECORD\n     A            FIELD         10A\n\n", 2, 1, 1},
+		{"DDS sequence numbers", "IBM i DDS", "00010A* comment\r\n00020A          R RECORD\r\n00030", 1, 1, 1},
+		{"DDS comment markers in constants", "IBM i DDS", "     A                                  CONST('/* // *')\n     A                                  TEXT('It''s text')\n      * comment", 2, 1, 0},
+		{"DDS short lines", "IBM i DDS", "\n     \n      *", 0, 1, 2},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

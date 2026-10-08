@@ -952,7 +952,7 @@ func CountStats(fileJob *FileJob) {
 		if !count(fileJob, bomSkip, endPoint) {
 			return
 		}
-	} else if fileJob.Language != "DDS" && noTokensAtAll(langFeatures) && specialisedCounterEligible(fileJob) {
+	} else if fileJob.Language != "IBM i DDS" && noTokensAtAll(langFeatures) && specialisedCounterEligible(fileJob) {
 		if !countLoopNoTokens(fileJob, bomSkip, endPoint) {
 			return
 		}
@@ -1353,7 +1353,7 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 	content := fileJob.Content
 	rpg := fileJob.Language == "RPG" || fileJob.Language == "RPGLE" || fileJob.Language == "SQLRPGLE"
 	cobol := fileJob.Language == "COBOL"
-	fixedColumns := cobol || fileJob.Language == "DDS" || (rpg && (fileJob.Language == "RPG" || !rpgFullyFree(content[bomSkip:])))
+	fixedColumns := cobol || fileJob.Language == "IBM i DDS" || (rpg && (fileJob.Language == "RPG" || !rpgFullyFree(content[bomSkip:])))
 	sequenceColumns := 5
 	if cobol {
 		sequenceColumns = 6
