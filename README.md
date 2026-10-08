@@ -1695,8 +1695,7 @@ columns 1-5 are sequence numbers and an asterisk in column 7 marks a comment.
 RPGLE and SQLRPGLE use those column rules unless the first line contains
 `**FREE` beginning in column 1. They also recognize `//` comments; SQLRPGLE
 additionally recognizes `--` and `/* ... */` comments. CL recognizes
-`/* ... */` comments. Complexity counting is not currently defined for these
-languages. Source must be exported as text in an encoding scc can read, such
+`/* ... */` comments. Source must be exported as text in an encoding scc can read, such
 as UTF-8, with source columns preserved rather than prefixed with record metadata.
 
 DDS (`.dds`, `.dspf`, `.pf`, `.lf`, `.prtf`, `.mnudds`, `.mnucmd`) also uses
@@ -1705,6 +1704,16 @@ in column 7 marking a comment. Sequence-only lines count as blank for both DDS
 and fixed-format RPG. RPG compile-time data beginning with a `**` record is
 counted as source data, without interpreting comment or string markers.
 DDS complexity counting is not defined.
+
+IBM i complexity counts decision opcodes, including conditional loops. RPGLE
+counts `IF`, `ELSEIF`, `WHEN`, `DOW`, `DOU`, and `FOR`. Fixed-format RPG also
+counts comparison variants of `IF`, `WHEN`, `DOW`, `DOU`, `CAB`, and `CAS`, using
+the calculation opcode field (columns 26-35 for RPGLE, 28-32 for legacy RPG).
+CL counts `IF`, `WHEN`, `DOWHILE`, `DOUNTIL`, `DOFOR`, and `MONMSG` exception
+branches. Matching is case-insensitive. Plain `DO`, closing opcodes, comments,
+strings, operands, and RPG compile-time data add nothing. Embedded SQL decisions
+are not added to the RPG count, and DDS retains zero complexity. These counts
+are decision-token estimates rather than a full control-flow analysis.
 
 COBOL defaults to fixed-format source: columns 1-6 are sequence metadata,
 column 7 is the indicator area (`*` and `/` mark comment records), and columns

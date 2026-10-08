@@ -529,7 +529,7 @@ func codeState(
 			}
 
 		case TComplexity:
-			if index == 0 || !isIdentifierContinue(content[index-1]) {
+			if (index == 0 || !isIdentifierContinue(content[index-1])) && ibmiComplexityToken(fileJob, index, offsetJump) {
 				fileJob.Complexity++
 				fileJob.bumpComplexityLine()
 				fileJob.bumpCognitive()
@@ -623,7 +623,7 @@ func codeStateSlow(
 				}
 
 			case TComplexity:
-				if index == 0 || !isIdentifierContinue(fileJob.Content[index-1]) {
+				if (index == 0 || !isIdentifierContinue(fileJob.Content[index-1])) && ibmiComplexityToken(fileJob, index, offsetJump) {
 					fileJob.Complexity++
 					fileJob.bumpComplexityLine()
 					fileJob.bumpCognitive()
@@ -758,7 +758,7 @@ func blankState(
 		if fileJob.ContentByteType != nil {
 			fileJob.ContentByteType[index] = ByteTypeCode
 		}
-		if index == 0 || !isIdentifierContinue(fileJob.Content[index-1]) {
+		if (index == 0 || !isIdentifierContinue(fileJob.Content[index-1])) && ibmiComplexityToken(fileJob, index, offsetJump) {
 			fileJob.Complexity++
 			fileJob.bumpComplexityLine()
 			fileJob.bumpCognitive()
@@ -1527,6 +1527,11 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 		// This means the end of processing the line so calculate the stats according to what state
 		// we are currently in
 		if curByte == '\n' || index >= endPoint {
+			if rpg && fixedColumns && !rpgData && !Complexity && currentState != SComment && fixedRPGDecision(fileJob.Language, content[lineStart:index+1]) {
+				fileJob.Complexity++
+				fileJob.bumpComplexityLine()
+				fileJob.bumpCognitive()
+			}
 			fileJob.Lines++
 			if cobol && formatChanged {
 				fixedColumns = nextFixed
