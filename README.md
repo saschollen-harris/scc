@@ -1707,7 +1707,7 @@ DDS complexity counting is not defined.
 
 IBM i complexity counts decision opcodes, including conditional loops. RPGLE
 counts `IF`, `ELSEIF`, `WHEN`, `DOW`, `DOU`, and `FOR`. Fixed-format RPG also
-counts comparison variants of `IF`, `WHEN`, `DOW`, `DOU`, `CAB`, and `CAS`, using
+counts `COMP` and comparison variants of `IF`, `WHEN`, `DOW`, `DOU`, `CAB`, and `CAS`, using
 the calculation opcode field (columns 26-35 for RPGLE, 28-32 for legacy RPG).
 CL counts `IF`, `WHEN`, `DOWHILE`, `DOUNTIL`, `DOFOR`, and `MONMSG` exception
 branches. Matching is case-insensitive. Plain `DO`, closing opcodes, comments,

@@ -16,6 +16,10 @@ func ibmiComplexityToken(job *FileJob, index, length int) bool {
 	if !rpg && !cl {
 		return true
 	}
+	// COMP is a fixed-format opcode; free-form identifiers must not count.
+	if rpg && bytes.EqualFold(job.Content[index:index+length], []byte("COMP")) {
+		return false
+	}
 	if index+length < len(job.Content) && isIdentifierContinue(job.Content[index+length]) {
 		return false
 	}

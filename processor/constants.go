@@ -11946,6 +11946,7 @@ var languageDatabase = map[string]Language{
 	"RPG": {
 		LineComment: []string{},
 		ComplexityChecks: []string{
+			"COMP",
 			"IF",
 			"ELSEIF",
 			"WHEN",
@@ -12018,6 +12019,7 @@ var languageDatabase = map[string]Language{
 			"//",
 		},
 		ComplexityChecks: []string{
+			"COMP",
 			"IF",
 			"ELSEIF",
 			"WHEN",
@@ -13275,6 +13277,7 @@ var languageDatabase = map[string]Language{
 			"--",
 		},
 		ComplexityChecks: []string{
+			"COMP",
 			"IF",
 			"ELSEIF",
 			"WHEN",
