@@ -2433,7 +2433,7 @@ var languageDatabase = map[string]Language{
 	},
 	"COBOL": {
 		LineComment: []string{
-			"*",
+			"*>",
 		},
 		ComplexityChecks: []string{
 			"for ",
@@ -2454,10 +2454,26 @@ var languageDatabase = map[string]Language{
 			"ccp",
 			"cobol",
 			"cpy",
+			"cblle",
 		},
-		ExtensionFile:   false,
-		MultiLine:       [][]string{},
-		Quotes:          []Quote{},
+		ExtensionFile: false,
+		MultiLine:     [][]string{},
+		Quotes: []Quote{
+			{
+				Start:        "'",
+				End:          "'",
+				IgnoreEscape: true,
+				DocString:    false,
+				Delimited:    false,
+			},
+			{
+				Start:        "\"",
+				End:          "\"",
+				IgnoreEscape: true,
+				DocString:    false,
+				Delimited:    false,
+			},
+		},
 		NestedMultiLine: false,
 		LineSplice:      false,
 		Escape:          "",

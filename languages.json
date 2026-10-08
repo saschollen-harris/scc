@@ -1282,10 +1282,10 @@
       "!= ",
       "== "
     ],
-    "extensions": ["cob", "cbl", "ccp", "cobol", "cpy"],
-    "line_comment": ["*"],
+    "extensions": ["cob", "cbl", "ccp", "cobol", "cpy", "cblle"],
+    "line_comment": ["*>"],
     "multi_line": [],
-    "quotes": []
+    "quotes": [{"start": "'", "end": "'", "ignoreEscape": true}, {"start": "\"", "end": "\"", "ignoreEscape": true}]
   },
   "CSS": {
     "complexitychecks": [

@@ -1706,6 +1706,14 @@ and fixed-format RPG. RPG compile-time data beginning with a `**` record is
 counted as source data, without interpreting comment or string markers.
 DDS complexity counting is not defined.
 
+COBOL defaults to fixed-format source: columns 1-6 are sequence metadata,
+column 7 is the indicator area (`*` and `/` mark comment records), and columns
+8-72 contain source. Text beyond column 72 does not contribute code lines.
+The `*>` inline comment marker is recognized outside quoted literals.
+`>>SOURCE FORMAT [IS] FREE` and `>>SOURCE FORMAT [IS] FIXED` directives switch
+the format for subsequent records. COBOL source containing NUL bytes is skipped
+by normal binary detection; use `--binary` to include it deliberately.
+
 ### Issues
 
 Its possible that you may see the counts vary between runs. This usually means one of two things. Either something is changing or locking the files under scc, or that you are hitting ulimit restrictions. To change the ulimit see the following links.

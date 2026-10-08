@@ -1352,7 +1352,13 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 
 	content := fileJob.Content
 	rpg := fileJob.Language == "RPG" || fileJob.Language == "RPGLE" || fileJob.Language == "SQLRPGLE"
-	fixedColumns := fileJob.Language == "DDS" || (rpg && (fileJob.Language == "RPG" || !rpgFullyFree(content[bomSkip:])))
+	cobol := fileJob.Language == "COBOL"
+	fixedColumns := cobol || fileJob.Language == "DDS" || (rpg && (fileJob.Language == "RPG" || !rpgFullyFree(content[bomSkip:])))
+	sequenceColumns := 5
+	if cobol {
+		sequenceColumns = 6
+	}
+	nextFixed, formatChanged := false, false
 	rpgData := false
 	// Hoisted because neither changes for the life of the loop and both are
 	// read on every byte of the file.
@@ -1362,17 +1368,20 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 	for index := bomSkip; index < total; index++ {
 		curByte := content[index]
 		if index == lineStart {
+			if cobol {
+				nextFixed, formatChanged = cobolSourceFormat(content[index:])
+			}
 			if rpg && (index != bomSkip || fixedColumns) && bytes.HasPrefix(content[index:], []byte("**")) {
 				rpgData = true
 				fixedColumns = false
 			}
 		}
 		if fixedColumns {
-			if index == lineStart && currentState == SBlank && rpgCommentLine(content[index:]) {
+			if index == lineStart && currentState == SBlank && ((!cobol && rpgCommentLine(content[index:])) || (cobol && cobolCommentLine(content[index:]))) {
 				currentState = SComment
 			}
-			// Columns 1-5 contain sequence numbers, not source code.
-			if index-lineStart < 5 && curByte != '\n' {
+			// Ignore the sequence area; COBOL also reserves column 7 for indicators.
+			if (index-lineStart < sequenceColumns || (cobol && (index-lineStart >= 72 || (index-lineStart == 6 && currentState != SComment)))) && curByte != '\n' {
 				curByte = ' '
 			}
 		}
@@ -1519,7 +1528,10 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 		// we are currently in
 		if curByte == '\n' || index >= endPoint {
 			fileJob.Lines++
-			if Cognitive || fixedColumns || rpg {
+			if cobol && formatChanged {
+				fixedColumns = nextFixed
+			}
+			if Cognitive || fixedColumns || rpg || cobol {
 				lineStart = index + 1
 				needIndent = true
 			}
@@ -1599,6 +1611,11 @@ func countLoopGeneric(fileJob *FileJob, langFeatures LanguageFeature, bomSkip, e
 					// Same as above
 					printTraceF("%s line %d ended with state: %d: counted as comment", fileJob.Location, fileJob.Lines, currentState)
 				}
+			}
+			// COBOL literal continuation is indicated on the next source record;
+			// it must not hide that record's comment or blank indicator.
+			if cobol && currentState == SString {
+				currentState = SBlank
 			}
 		}
 	}
